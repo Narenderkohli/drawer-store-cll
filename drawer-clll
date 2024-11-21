@@ -1,0 +1,43 @@
+        $(document).on("click","#ButtonAddToCart" ,function(){
+  var button = $(this)
+
+  var get_id_this = $(this).attr('value');
+  console.log(get_id_this);
+  $.ajax({
+  type: 'POST',
+  url: '/cart/add.js',
+  data: {
+  quantity:1,
+  id: get_id_this
+  },
+  dataType: 'json',
+  success: function() {
+  setTimeout(function(){
+      // button.text('Added!');
+    $('.head-cart').trigger('click');
+   $.ajax({
+             type: 'GET',
+                          url: '/cart',
+                          dataType: 'html',
+                          success: function(data) {
+                         // console.log('dataaaaa',data);
+                          var newhtml=$(data).find('.cart_items_data').html();
+                        // console.log('dataaaaa112222222',newhtml);
+                          $('.cart_drawer_data').html(newhtml);
+                          $('#CartDrawer-Checkout').prop("disabled", false);
+                             $.getJSON('/cart.js', function(cart) {
+               var cartCount = cart.item_count;
+               $(".cart-count-bubble").text(cartCount);
+               // console.log(cartCount);
+               });
+                          },
+                          });
+
+
+  }, 1000);
+
+  }
+
+  });
+
+      });
